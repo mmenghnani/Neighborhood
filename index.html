@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>The Neighborhood Map Project</title>
+  <meta name="description" content="The Neighborhood Map Project">
+  <meta name="author" content="Mohit Menghnani">
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/dashboard.css" rel="stylesheet">
+</head>
+
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+
+        <a class="navbar-brand">Neighborhood Map</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse" >
+          <form class="navbar-form navbar-right" role="search">
+            <input type = "text" placeholder="Search…" type="search" name="q" data-bind="value: query, valueUpdate: 'keyup'" autocomplete="off">
+            </form>
+            <div class="content">
+    </ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <div id="wrapper" aria-expanded="true" class="collapse in">
+    <div id="list-sidebar" class="col-sm-3 col-md-2 text-justify sidebar">
+         <!-- <ul data-bind="template: {name:'location', foreach:locations}"></ul> -->
+      <ul id="listed-items" class="nav nav-sidebar text-justify" data-bind="foreach: locationList">
+        <li>
+          <a data-bind="text:name"></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div id="map"></div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="js/bootstrap.js"></script>
+  <script src="js/knockout-min.js"></script>
+  <script src = "js/app.js">  </script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA2hxI29jTOaXwxYHvXrJ3XOrCfNE8CjsQ&callback=initMap"></script>
+
+
+</body>
+</html>
+
