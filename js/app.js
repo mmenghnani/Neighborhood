@@ -34,7 +34,7 @@ var locations = [
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         zoom: 13,
-         center : locations[0]
+         center : locations[1]
     });
     ko.applyBindings(new viewModel);
 }
@@ -66,22 +66,16 @@ var locationConstructor = function (data) {
         self.city = apiResults.location.formattedAddress[1];
         self.phone = apiResults.contact.phone;
         self.phone = formatPhoneNumber(self.phone);
+        self.URL = apiResults.url;
 
         if(!(self.phone)){
-            self.phone = 'Not provided';
+            self.phone = 'Phone Number not available';
         }
         else {
                 }
      }).fail(function(){
         alert('Something went wrong with the 4square api');
      });
-
-       this.contentString = '<div class="info-window-content"><div class="title"><b>' + data.name + "</b></div>" +
-        '<div class="content"><a href="' + self.URL +'">' + self.URL + "</a></div>" +
-        '<div class="content">' + self.street + "</div>" +
-        '<div class="content">' + self.city + "</div>" +
-        '<div class="content">' + self.phone + "</div></div>";
-
 
      this.marker = new google.maps.Marker({
         map: map
@@ -93,26 +87,24 @@ var locationConstructor = function (data) {
     //Opening InfoWindow with a click
     this.infoWindow = new google.maps.InfoWindow({content: self.contentString});
 
+     currWindow = false;
+
      this.marker.addListener('click', function () {
+        if(currWindow){
+            currWindow.close(); //To close any already open info windows so that there is only one infowindow open at a given time.
+        }
         self.infoWindow.open(map, self.marker);
-    });
-
-    //Closing InfoWindow with a click
-    var closeInfoWindow = function() {
-        self.infoWindow.close();
-    };
-    google.maps.event.addListener(map, 'click', closeInfoWindow);
-
-    //separate
-     this.marker.addListener('click', function(){
         self.contentString = '<div class="info-window-content"><div class="title"><b>' + data.name + "</b></div>" +
         '<div class="content"><a href="' + self.URL +'">' + self.URL + "</a></div>" +
-        '<div class="content">' + self.street + "</div>" +
+        '<div class="content">' + self.streetName + "</div>" +
         '<div class="content">' + self.city + "</div>" +
-        '<div class="content"><a href="tel:' + self.phone +'">' + self.phone +"</a></div></div>";
+        '<div class="content">' + self.phone + "</a></div></div>";
+        self.infoWindow.setContent(self.contentString);
+        currWindow = self.infoWindow;
+    });
 
-            self.infoWindow.setContent(self.contentString); });
-
+    this.highlightMarkerOnClick = function () {
+     }
 }
 
 var viewModel = function () {
