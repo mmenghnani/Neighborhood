@@ -92,8 +92,11 @@ var locationConstructor = function (data) {
      this.marker.addListener('click', function () {
         if(currWindow){
             currWindow.close(); //To close any already open info windows so that there is only one infowindow open at a given time.
+            currMarker.setIcon('https://goo.gl/Htiu8j'); //change the icon color to the default one which is red
+
         }
         self.infoWindow.open(map, self.marker);
+        self.marker.setIcon('https://goo.gl/iDKehU'); //change the icon color to green
         self.contentString = '<div class="info-window-content"><div class="title"><b>' + data.name + "</b></div>" +
         '<div class="content"><a href="' + self.URL +'">' + self.URL + "</a></div>" +
         '<div class="content">' + self.streetName + "</div>" +
@@ -101,9 +104,10 @@ var locationConstructor = function (data) {
         '<div class="content">' + self.phone + "</a></div></div>";
         self.infoWindow.setContent(self.contentString);
         currWindow = self.infoWindow;
+        currMarker = self.marker;
     });
 
-    this.highlightMarkerOnClick = function () {
+        this.highlightMarkerOnClick = function () {
      }
 }
 
