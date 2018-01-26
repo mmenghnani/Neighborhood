@@ -18,7 +18,7 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse" >
           <form class="navbar-form navbar-right" role="search">
-            <input type = "text" placeholder="Search…" type="search" name="q" data-bind="value: query, valueUpdate: 'keyup'" autocomplete="off">
+           <!-- <input type = "text" placeholder="Search…" type="search" name="q" data-bind="value: query, valueUpdate: 'keyup'" autocomplete="off"> -->
             </form>
             <div class="content">
     </ul>
@@ -31,7 +31,7 @@
     <div id="list-sidebar" class="col-sm-3 col-md-2 text-justify sidebar">
          <!-- <ul data-bind="template: {name:'location', foreach:locations}"></ul> -->
       <ul id="listed-items" class="nav nav-sidebar text-justify" data-bind="foreach: locationList">
-        <li data-bind="attr:{id:name}">
+        <li data-bind="attr:{id:name}" onclick="highlightTheMarker(document.getElementById('name').value)">
           <a data-bind="text:name"></a>
         </li>
       </ul>

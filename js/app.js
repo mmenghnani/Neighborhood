@@ -98,7 +98,7 @@ var locationConstructor = function (data) {
             currWindow.close(); //To close any already open info windows so that there is only one infowindow open at a given time.
             currMarker.setIcon('https://goo.gl/Htiu8j'); //change the icon color to the default one which is red
 
-            unhighlightLeftNav(currMarker.title);
+            unhighlightLeftNavElement(currMarker.title);
         }
         self.infoWindow.open(map, self.marker);
         self.marker.setIcon('https://goo.gl/iDKehU'); //change the icon color to green
@@ -107,24 +107,23 @@ var locationConstructor = function (data) {
             '<div class="content">' + self.streetName + "</div>" +
             '<div class="content">' + self.city + "</div>" +
             '<div class="content">' + self.phone + "</a></div></div>";
-        self.contentString += '<img class="images" src= http://maps.googleapis.com/maps/api/streetview?size=200x100&location=' + self.lat + "," + self.lng + '>';
+        self.contentString += '<img class="images" src= http://maps.googleapis.com/maps/api/streetview?'
+        +'size=200x100&location=' + self.lat + "," + self.lng + '>';
         self.infoWindow.setContent(self.contentString);
         currWindow = self.infoWindow;
         currMarker = self.marker;
-        clickedItem = self.name;
-     //  console.log(clickedItem);
-     highlightLeftNav();
+        highlightLeftNavElement(self.name);
     });
 
-var highlightLeftNav = function () {
-    var elem = document.getElementById(clickedItem);
+var highlightLeftNavElement = function (data) {
+    var elem = document.getElementById(data);
         elem.style.backgroundColor = "#F0FFFF";
         elem.style.color = "white";
         elem.style.fontWeight = "700";
     }
 }
 
-var unhighlightLeftNav = function (data){
+var unhighlightLeftNavElement = function (data){
     var elem = document.getElementById(data);
         elem.style.backgroundColor = "transparent";
         elem.style.fontWeight = "400";
@@ -136,16 +135,10 @@ var viewModel = function () {
     locations.forEach(function(locationItem){
         self.locationList.push(new locationConstructor(locationItem));
     });
-    this.query = ko.observable('');
+   /* this.query = ko.observable('');
+            console.log(locationList);*/
 }
 
-var filteredList = function() {
-    viewModel.locations = ko.dependentObservable(function() {
-        var search = this.query().toLowerCase();
-        return ko.utils.arrayFilter(locations, function(beer) {
-            return beer.name.toLowerCase().indexOf(search) >= 0;
-        });
-    }, viewModel);
-}
+
 
 
