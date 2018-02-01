@@ -46,97 +46,134 @@ function formatPhoneNumber(number) {
   return (!main) ? null : "(" + main[1] + ") " + main[2] + "-" + main[3];
 }
 
-var locationConstructor = function (data) {
+var createLocation = function (data) {
     var self = this;
-    this.name = data.name;
-    this.lat = data.lat;
-    this.lng = data.lng;
-    this.streetName = "";
-    this.city = "";
-    this.phone = "";
-    this.url = "";
+    var def = $.Deferred();
+    var retVal = {
+        name: data.name,
+        lat: data.lat,
+        lng: data.lng,
+        streetName: "",
+        city: "",
+        phone: "",
+        url: "",
+        contentString: "",
+        marker: undefined,
+        infoWindow: undefined
+    };
 
-    clientID = "2KQZ3MUMNVWNHCQPQ4BXUVWNQ4UJG0SEVNYH1DWUGAGFBPCZ";
-    clientSecret = "LQ1DPDKXQYZEH344RRSRTXK53JYSYV2T52FSSGXUAU5LUX5K";
-
-
-    this.isVisible = ko.observable(true);
-
-    var foursquareURL = 'https://api.foursquare.com/v2/'+
-    'venues/search?ll='+this.lat + ',' + this.lng + '&client_id=' + clientID +
-                '&client_secret=' + clientSecret + '&v=20180124';
-
-     $.getJSON(foursquareURL).done(function(data){
-        var apiResults = data.response.venues[0];
-        self.streetName = apiResults.location.formattedAddress[0];
-        self.city = apiResults.location.formattedAddress[1];
-        self.phone = apiResults.contact.formattedPhone;
-        self.url = apiResults.url;
-        //console.log(self.url);
-
-        if(!(self.phone)){
-            self.phone = 'Phone Number not available';
-        }
-     }).fail(function(){
-        //alert('Something went wrong with the 4square api');
-     });
-
-     this.marker = new google.maps.Marker({
+    retVal.marker = new google.maps.Marker({
         map: map
         , animation: google.maps.Animation.DROP
         , position: new google.maps.LatLng(data.lat, data.lng)
         , title: self.name
     });
 
-    //Opening InfoWindow with a click
-     this.infoWindow = new google.maps.InfoWindow({content: self.contentString});
+    currWindow = false;
 
-     currWindow = false;
-
-     this.marker.addListener('click', function () {
+    retVal.marker.addListener('click', function () {
         if(currWindow){
-            currWindow.close(); //To close any already open info windows so that there is only one infowindow open at a given time.
-            currMarker.setIcon('https://goo.gl/Htiu8j'); //change the icon color to the default one which is red
-
-            unhighlightLeftNavElement(currMarker.title);
+            undoClickActions(currWindow,currMarker,scope);
         }
-        self.infoWindow.open(map, self.marker);
-        self.marker.setIcon('https://goo.gl/iDKehU'); //change the icon color to green
-        self.contentString = '<div class="info-window-content"><div class="title"><b>' + data.name + "</b>" +
-            '<a href="' + self.url +'"> (website) </a></div>' +
-            '<div class="content">' + self.streetName + "</div>" +
-            '<div class="content">' + self.city + "</div>" +
-            '<div class="content">' + self.phone + "</a></div></div>";
-        self.contentString += '<img class="images" src= http://maps.googleapis.com/maps/api/streetview?'
-        +'size=200x100&location=' + self.lat + "," + self.lng + '>';
-        self.infoWindow.setContent(self.contentString);
-        currWindow = self.infoWindow;
-        currMarker = self.marker;
-        highlightLeftNavElement(self.name);
-    });
+        this.infoWindow.setContent(this.contentString);
+        ClickActions(this);
+        currWindow = this.infoWindow;
+        currMarker = this.marker;
+        scope = this.name;
+    }.bind(retVal));
 
-var highlightLeftNavElement = function (data) {
-    var elem = document.getElementById(data);
-        elem.style.backgroundColor = "#F0FFFF";
-        elem.style.color = "white";
-        elem.style.fontWeight = "700";
-    }
+    clientID = "2KQZ3MUMNVWNHCQPQ4BXUVWNQ4UJG0SEVNYH1DWUGAGFBPCZ";
+    clientSecret = "LQ1DPDKXQYZEH344RRSRTXK53JYSYV2T52FSSGXUAU5LUX5K";
+
+    var foursquareURL = 'https://api.foursquare.com/v2/'+
+    'venues/search?ll='+retVal.lat + ',' + retVal.lng + '&client_id=' + clientID +
+                '&client_secret=' + clientSecret + '&v=20180124';
+
+    $.getJSON(foursquareURL).done(function(data){
+            var apiResults = data.response.venues[0];
+            retVal.streetName = apiResults.location.formattedAddress[0];
+            retVal.city = apiResults.location.formattedAddress[1];
+            retVal.phone = apiResults.contact.formattedPhone;
+                if(!(retVal.phone)){
+                    retVal.phone = 'Phone Number not available';
+                }
+            retVal.url = apiResults.url;
+            retVal.contentString = '<div class="info-window-content"><div class="title"><b>' + retVal.name + "</b>" +
+                '<a href="' + retVal.url +'"> (website) </a></div>' +
+                '<div class="content">' + retVal.streetName + "</div>" +
+                '<div class="content">' + retVal.city + "</div>" +
+                '<div class="content">' + retVal.phone + "</a></div></div>";
+            retVal.contentString += '<img class="images" src= http://maps.googleapis.com/maps/api/streetview?'
+            +'size=200x100&location=' + retVal.lat + "," + retVal.lng + '>';
+            //Opening InfoWindow with a click
+            retVal.infoWindow = new google.maps.InfoWindow({content: retVal.contentString});
+            def.resolve(retVal);
+        }).fail(function(){
+            console.log('Something went wrong with the 4square api');
+        })
+        return def.promise();
 }
 
-var unhighlightLeftNavElement = function (data){
-    var elem = document.getElementById(data);
+    var clickActions = function (data) {
+        data.infoWindow.open(map,data.marker);
+        data.marker.setIcon('https://goo.gl/iDKehU');
+        var elem = document.getElementById(data.name);
+            elem.style.backgroundColor = "#505050";
+            elem.style.color = "white";
+            elem.style.fontWeight = "700";
+        }
+
+    var undoClickActions = function (window,marker,scope){
+        window.close();//To close any already open info windows so that there is only one infowindow open at a given time.
+        marker.setIcon('https://goo.gl/Htiu8j'); //change the icon color to the default one which is red
+    var elem = document.getElementById(scope);
         elem.style.backgroundColor = "transparent";
         elem.style.fontWeight = "400";
+        elem.style.color = "#337ab7";
 }
+
+    var leftNavClickActions = function() {
+       // self.
+    }
 
 var viewModel = function () {
     var self = this;
+
     this.locationList = ko.observableArray([]);
+
     locations.forEach(function(locationItem){
-        self.locationList.push(new locationConstructor(locationItem));
+        createLocation(locationItem).then(function(data) {
+            self.locationList.push(data);
+        })
     });
-   /* this.query = ko.observable('');
-            console.log(locationList);*/
+
+    this.query = ko.observable('');
+
+    this.filteredList = ko.computed(function () {
+        return ko.utils.arrayFilter(self.locationList, function (locationItem) {
+            //if any character matches any marker
+            console.log(self.query());
+             if(locationItem.name.toLowerCase().indexOf(self.query().toLowerCase()) >= 0){
+                locationItem.marker.setMap(map);
+             }
+             else {
+                locationItem.marker.setMap(null);
+             }
+         });
+
+    this.navclick = ko.observable();
+
+    this.clickListItem = function (click){
+        self.navclick(click);
+        if(click != null){
+            //self.navclick().leftNavClickActions();
+            console.log("I am here");
+        }
+    };
+
+    });
+
+
 }
 
 

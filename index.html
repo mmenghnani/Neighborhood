@@ -7,44 +7,68 @@
   <meta name="author" content="Mohit Menghnani">
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <link href="css/dashboard.css" rel="stylesheet">
+  <link href="css/left-nav.css" rel="stylesheet">
+
+
 </head>
 
 <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
-
-        <a class="navbar-brand">Neighborhood Map</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse" >
-          <form class="navbar-form navbar-right" role="search">
-           <!-- <input type = "text" placeholder="Search…" type="search" name="q" data-bind="value: query, valueUpdate: 'keyup'" autocomplete="off"> -->
+          <a class="navbar-brand">Mohit's Neighborhood Map</a>
+          <form class="navbar-form navbar-left search-padding" role="search">
+            <input type = "text" placeholder="Search…" type="search" name="q" data-bind="value: query, valueUpdate: 'keyup'" autocomplete="off">
+            <button type="submit">Clear</button>
             </form>
-            <div class="content">
-    </ul>
-</div>
         </div>
-      </div>
-    </nav>
-
-    <div id="wrapper" aria-expanded="true" class="collapse in remove-nav">
-    <div id="list-sidebar" class="col-sm-3 col-md-2 text-justify sidebar">
-         <!-- <ul data-bind="template: {name:'location', foreach:locations}"></ul> -->
-      <ul id="listed-items" class="nav nav-sidebar text-justify" data-bind="foreach: locationList">
-        <li data-bind="attr:{id:name}" onclick="highlightTheMarker(document.getElementById('name').value)">
-          <a data-bind="text:name"></a>
-        </li>
-      </ul>
-    </div>
   </div>
-  <div id="map"></div>
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  <script src="js/bootstrap.js"></script>
-  <script src="js/knockout-min.js"></script>
-  <script src = "js/app.js">  </script>
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA2hxI29jTOaXwxYHvXrJ3XOrCfNE8CjsQ&callback=initMap"></script>
+           <!-- <ul class="nav sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#">
+                       Brand
+                    </a>
+                </li>
+                <li>
+                    <a href="#">Home</a>
+                </li>
+                <li>
+                    <a href="#">About</a>
+                </li>
+                <li>
+                    <a href="#">Events</a>
+                </li>
+                <li>
+                    <a href="#">Team</a>
+                </li>
+                         <li>
+                    <a href="#">Services</a>
+                </li>
+                <li>
+                    <a href="#">Contact</a>
+                </li>
+                <li>
+                    <a href="https://twitter.com/maridlcrmn">Follow me</a>
+                </li>
+            </ul> -->
+        </nav>
 
+
+<div id="wrapper" aria-expanded="true" class=" collapse in remove-nav">
+  <div id="list-sidebar" class="col-sm-2 col-md-2 text-justify sidebar">
+    <ul id="listed-items" class="nav nav-sidebar text-justify" data-bind="foreach: locationList">
+    <li><a data-bind="attr:{id:name}, text: name, click: $parent.clickListItem"></a></li>
+      </ul>
+  </div>
+</div>
+
+<div id="map"></div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="js/bootstrap.js"></script>
+<script src="js/knockout-min.js"></script>
+<script src = "js/app.js">  </script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA2hxI29jTOaXwxYHvXrJ3XOrCfNE8CjsQ&callback=initMap"></script>
 
 </body>
 </html>
