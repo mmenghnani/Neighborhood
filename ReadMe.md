@@ -11,12 +11,12 @@ The location data is being pulled from the foursquare API and the map is being g
 I have used knockout JS framework for this application
 
 # Tools/Skills utilized for this project
-Javascript
-Jquery
-Knockout JS
-Foursquare API
-Google Maps API
-Bootstrap
+1) Javascript
+2) Jquery
+3) Knockout JS
+4) Foursquare API
+5) Google Maps API
+6) Bootstrap
 
 # Live Version of this application is hosted at 
 https://mmenghnani.github.io/Neighborhood/
