@@ -18,7 +18,8 @@ Foursquare API
 Google Maps API
 Bootstrap
 
-# Live Version of this application is hosted at https://mmenghnani.github.io/Neighborhood/
+# Live Version of this application is hosted at 
+https://mmenghnani.github.io/Neighborhood/
 
 
 
