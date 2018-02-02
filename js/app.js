@@ -1,8 +1,8 @@
 var locations = [
         {
             name : 'Palace of Fine Arts',
-            lat : 37.80288814426483,
-            lng : -122.44841247797011
+            lat : 37.8027066,
+            lng : -122.4494161
          },
             {
             name: 'Ghirardelli Square',
@@ -15,13 +15,13 @@ var locations = [
             lng: -122.4058044
         },
         {
-            name : 'San Francisco City Hall',
-            lat : 37.7790961,
-            lng : -122.41886
+            name : 'San Francisco Symphony',
+            lat : 37.77990729540689,
+            lng : -122.41996637269969
         },
         {
             name: 'Golden Gate',
-            lat: 37.8197222,
+            lat: 37.8199924,
             lng: -122.4788889
         },
         {
@@ -36,16 +36,15 @@ var locations = [
         },
 
         {
-            name : 'San Francisco Botanical Garden',
-            lat : 37.7672,
-            lng : -122.4675
+            name : 'California Academy of Sciences',
+            lat : 37.769951624839024,
+            lng : -122.46643060712651
         }
     ]
 
-prevScope = null;
+prevScope = null; //setting up a global state variable for left nav item and marker clicks. Everytime, either one of them is clicked, the current object is stored in this variable to undo the highlight settings
 
-
-//Map Creation and initialization. Knockout bindings are also being called from here.
+//Map Creation and initialization. The ko binding is also being called from here.
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         zoom: 14,
@@ -72,7 +71,7 @@ var createLocationObject = function (data) {
     var self = this;
     var def = $.Deferred();
     var retVal = {
-        name: data.name,
+        name: "",
         lat: data.lat,
         lng: data.lng,
         streetName: "",
@@ -111,12 +110,14 @@ var createLocationObject = function (data) {
     clientID = "C2BEK4YGZW2O5TGDFVDIE3MFJWH3U1WZ3N2VJJ3BLYM4PIHE";
     clientSecret = "R1WVGB43T21Z1FYTIIY4DH2X5AB3O14TNNKNV5UQVHILUPXJ";
 
+
     var foursquareURL = 'https://api.foursquare.com/v2/'+
-    'venues/search?ll='+retVal.lat + ',' + retVal.lng + '&client_id=' + clientID +
+    'venues/search?ll='+data.lat + ',' + data.lng + '&client_id=' + clientID +
                 '&client_secret=' + clientSecret + '&v=20180124';
 
     $.getJSON(foursquareURL).done(function(data){
             var apiResults = data.response.venues[0];
+            retVal.name = apiResults.name;
             retVal.streetName = apiResults.location.formattedAddress[0];
             retVal.city = apiResults.location.formattedAddress[1];
             retVal.phone = apiResults.contact.formattedPhone;
@@ -124,6 +125,9 @@ var createLocationObject = function (data) {
                     retVal.phone = 'Phone Number not available';
                 }
             retVal.url = apiResults.url;
+                if(!(retVal.url)){
+                    retVal.url = null;
+                }
             retVal.contentString = '<div class="info-window-content"><div class="title"><b>' + retVal.name + "</b>" +
                 '<a href="' + retVal.url +'"> (website) </a></div>' +
                 '<div class="content">' + retVal.streetName + "</div>" +
