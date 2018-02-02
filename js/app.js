@@ -31,6 +31,10 @@ var locations = [
         {
             lat : 37.769951624839024,
             lng : -122.46643060712651
+        },
+        {
+            lat : 37.7762593,
+            lng : -122.432758
         }
     ]
 
@@ -104,7 +108,7 @@ var createLocationObject = function (data) {
     'venues/search?ll='+data.lat + ',' + data.lng + '&client_id=' + clientID +
                 '&client_secret=' + clientSecret + '&v=20180124';
 
-
+//create an object(retVal) for each lat long with data returned from foursqaure api
     $.getJSON(foursquareURL).done(function(data){
             var apiResults = data.response.venues[0];
             retVal.name = apiResults.name;
@@ -112,7 +116,7 @@ var createLocationObject = function (data) {
             retVal.city = apiResults.location.formattedAddress[1];
             retVal.phone = apiResults.contact.formattedPhone;
                 if(!(retVal.phone)){
-                    retVal.phone = 'Phone Number not available';
+                    retVal.phone = '';
                 }
             retVal.url = apiResults.url;
                 if(!(retVal.url)){
@@ -173,9 +177,9 @@ var createLocationObject = function (data) {
 
     var self = this;
 
-    //Observable to
     this.query = ko.observable('');
 
+    //iterating through the location list and generating object for each one of them
     this.locationList = ko.observableArray([]);
     locations.forEach(function(locationItem){
         createLocationObject(locationItem).then(function(data) {
@@ -185,6 +189,7 @@ var createLocationObject = function (data) {
 
     this.navclick = ko.observable();
 
+    //comparing the value entered in search field and returning it to update the list view
     this.filteredList = ko.computed(function () {
         return ko.utils.arrayFilter(self.locationList(), function (locationItem) {
             //if any character matches any marker
@@ -198,6 +203,7 @@ var createLocationObject = function (data) {
          });
     },this);
 
+   //tracking the click on the listItem and based on that updating the marker and opening the corresponding infoWindow
     this.clickListItem = function (click){
        self.navclick(click);
        if((click!=null)){
