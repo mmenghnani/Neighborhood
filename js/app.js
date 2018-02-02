@@ -8,33 +8,55 @@ var locations = [
             name: 'Ghirardelli Square',
             lat: 37.80588333008106,
             lng: -122.42303703974015
-        }, {
+        },
+        {
             name: 'Coit Tower',
             lat: 37.8024286,
             lng: -122.4058044
         },
         {
+            name : 'San Francisco City Hall',
+            lat : 37.7790961,
+            lng : -122.41886
+        },
+        {
             name: 'Golden Gate',
-            lat: 37.8199,
-            lng: -122.4783
+            lat: 37.8197222,
+            lng: -122.4788889
         },
         {
             name: 'Alcatraz Island',
-            lat: 37.8267,
-            lng: -122.4230
+            lat: 37.828125,
+            lng: -122.422844
         },
         {
             name: 'Pier 39',
             lat: 37.8098305727594,
             lng: -122.4103707075119
+        },
+
+        {
+            name : 'San Francisco Botanical Garden',
+            lat : 37.7672,
+            lng : -122.4675
         }
     ]
+
+prevScope = null;
+
 
 //Map Creation and initialization. Knockout bindings are also being called from here.
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 13,
-         center : {lat : 37.80588333008106, lng: -122.42303703974015}
+        zoom: 14,
+        mapTypeControlOptions: {
+              style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+              position: google.maps.ControlPosition.TOP_CENTER
+          },
+          zoomControlOptions: {
+              position: google.maps.ControlPosition.RIGHT_CENTER
+          },
+         center : {lat : 37.8040051173 , lng: -122.436809919}
     });
     ko.applyBindings(new viewModel);
 }
@@ -46,7 +68,7 @@ function formatPhoneNumber(number) {
   return (!main) ? null : "(" + main[1] + ") " + main[2] + "-" + main[3];
 }
 
-var createLocation = function (data) {
+var createLocationObject = function (data) {
     var self = this;
     var def = $.Deferred();
     var retVal = {
@@ -72,18 +94,22 @@ var createLocation = function (data) {
     currWindow = false;
 
     retVal.marker.addListener('click', function () {
-        if(currWindow){
-            undoClickActions(currWindow,currMarker,scope);
+        if(prevScope){
+            undoClickActions(prevScope);
         }
         this.infoWindow.setContent(this.contentString);
-        ClickActions(this);
-        currWindow = this.infoWindow;
-        currMarker = this.marker;
-        scope = this.name;
+        prevScope = this;
+        clickActions(this);
+       // console.log(prevScope);
+        //currWindow = this.infoWindow;
+        //currMarker = this.marker;
+        //scope = this.name;
     }.bind(retVal));
 
-    clientID = "2KQZ3MUMNVWNHCQPQ4BXUVWNQ4UJG0SEVNYH1DWUGAGFBPCZ";
-    clientSecret = "LQ1DPDKXQYZEH344RRSRTXK53JYSYV2T52FSSGXUAU5LUX5K";
+
+
+    clientID = "C2BEK4YGZW2O5TGDFVDIE3MFJWH3U1WZ3N2VJJ3BLYM4PIHE";
+    clientSecret = "R1WVGB43T21Z1FYTIIY4DH2X5AB3O14TNNKNV5UQVHILUPXJ";
 
     var foursquareURL = 'https://api.foursquare.com/v2/'+
     'venues/search?ll='+retVal.lat + ',' + retVal.lng + '&client_id=' + clientID +
@@ -112,69 +138,80 @@ var createLocation = function (data) {
             console.log('Something went wrong with the 4square api');
         })
         return def.promise();
-}
+    }
+
+    var highlightLeftNavStyle = function (data) {
+         var elem = document.getElementById(data.name);
+            elem.style.backgroundColor = "#505050";
+            elem.style.color = "white";
+            elem.style.fontWeight = "700";
+    }
+
+    var unhighlightLeftNavStyle = function(data){
+         var elem = document.getElementById(data);
+        elem.style.backgroundColor = "transparent";
+        elem.style.fontWeight = "400";
+        elem.style.color = "#337ab7";
+    }
 
     var clickActions = function (data) {
         data.infoWindow.open(map,data.marker);
         data.marker.setIcon('https://goo.gl/iDKehU');
-        var elem = document.getElementById(data.name);
-            elem.style.backgroundColor = "#505050";
-            elem.style.color = "white";
-            elem.style.fontWeight = "700";
+        highlightLeftNavStyle(data);
         }
 
-    var undoClickActions = function (window,marker,scope){
-        window.close();//To close any already open info windows so that there is only one infowindow open at a given time.
-        marker.setIcon('https://goo.gl/Htiu8j'); //change the icon color to the default one which is red
-    var elem = document.getElementById(scope);
-        elem.style.backgroundColor = "transparent";
-        elem.style.fontWeight = "400";
-        elem.style.color = "#337ab7";
-}
-
-    var leftNavClickActions = function() {
-       // self.
+    var undoClickActions = function (data){
+        data.infoWindow.close();//To close any already open info windows so that there is only one infowindow open at a given time.
+        data.marker.setIcon('https://goo.gl/Htiu8j'); //change the icon color to the default one which is red
+        unhighlightLeftNavStyle(data.name);
     }
 
-var viewModel = function () {
+    var leftNavClickActions = function(data) {
+       clickActions(data);
+    }
+
+ var viewModel = function () {
+
+//console.log(prevScope);
     var self = this;
 
-    this.locationList = ko.observableArray([]);
+    this.query = ko.observable('');
 
+    this.locationList = ko.observableArray([]);
     locations.forEach(function(locationItem){
-        createLocation(locationItem).then(function(data) {
+        createLocationObject(locationItem).then(function(data) {
             self.locationList.push(data);
         })
     });
 
-    this.query = ko.observable('');
 
     this.filteredList = ko.computed(function () {
-        return ko.utils.arrayFilter(self.locationList, function (locationItem) {
+        return ko.utils.arrayFilter(self.locationList(), function (locationItem) {
             //if any character matches any marker
-            console.log(self.query());
              if(locationItem.name.toLowerCase().indexOf(self.query().toLowerCase()) >= 0){
                 locationItem.marker.setMap(map);
              }
              else {
                 locationItem.marker.setMap(null);
              }
+             return locationItem.name.toLowerCase().indexOf(self.query().toLowerCase()) >= 0;
          });
-
-    this.navclick = ko.observable();
+    },this);
 
     this.clickListItem = function (click){
-        self.navclick(click);
-        if(click != null){
-            //self.navclick().leftNavClickActions();
-            console.log("I am here");
+       self.navclick(click);
+       if((click!=null)){
+            currScope = self.navclick();
+            if((prevScope!=null)){
+               undoClickActions(prevScope);
+            }
+            leftNavClickActions(currScope);
+            prevScope = currScope;
         }
-    };
-
-    });
-
-
+    }
 }
+
+
 
 
 

@@ -16,53 +16,22 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
-          <a class="navbar-brand">Mohit's Neighborhood Map</a>
-          <form class="navbar-form navbar-left search-padding" role="search">
+          <a class="navbar-brand new-class">Mohit's Neighborhood Map</a>
+          <form class="navbar-form navbar-right search-padding" role="search">
             <input type = "text" placeholder="Search…" type="search" name="q" data-bind="value: query, valueUpdate: 'keyup'" autocomplete="off">
             <button type="submit">Clear</button>
             </form>
         </div>
-  </div>
-
-           <!-- <ul class="nav sidebar-nav">
-                <li class="sidebar-brand">
-                    <a href="#">
-                       Brand
-                    </a>
-                </li>
-                <li>
-                    <a href="#">Home</a>
-                </li>
-                <li>
-                    <a href="#">About</a>
-                </li>
-                <li>
-                    <a href="#">Events</a>
-                </li>
-                <li>
-                    <a href="#">Team</a>
-                </li>
-                         <li>
-                    <a href="#">Services</a>
-                </li>
-                <li>
-                    <a href="#">Contact</a>
-                </li>
-                <li>
-                    <a href="https://twitter.com/maridlcrmn">Follow me</a>
-                </li>
-            </ul> -->
-        </nav>
 
 
-<div id="wrapper" aria-expanded="true" class=" collapse in remove-nav">
+  <div id="wrapper" aria-expanded="true" class=" collapse in remove-nav">
   <div id="list-sidebar" class="col-sm-2 col-md-2 text-justify sidebar">
-    <ul id="listed-items" class="nav nav-sidebar text-justify" data-bind="foreach: locationList">
+    <ul id="listed-items" class="nav nav-sidebar text-justify" data-bind="foreach: filteredList">
     <li><a data-bind="attr:{id:name}, text: name, click: $parent.clickListItem"></a></li>
       </ul>
   </div>
 </div>
-
+</div></nav>
 <div id="map"></div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="js/bootstrap.js"></script>
