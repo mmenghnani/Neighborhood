@@ -184,6 +184,7 @@ var createLocationObject = function (data) {
         })
     });
 
+    this.navclick = ko.observable();
 
     this.filteredList = ko.computed(function () {
         return ko.utils.arrayFilter(self.locationList(), function (locationItem) {
