@@ -14,43 +14,41 @@
 
 <body>
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container-fluid">
-        <div class="navbar-header">
-         <button type="button" class="navbar-toggle" data-toggle="offcanvas" data-target=".navbar-collapse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="offcanvas" data-target=".navbar-collapse">
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-          <a class="navbar-brand">Mohit's Neighborhood</a>
+                <a class="navbar-brand">Mohit's Neighborhood Map</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <form class="navbar-form navbar-right test">
+                    <input type="text" class="placeholders" placeholder="Search…" type="search" data-bind="value: query, valueUpdate: 'keyup'">
+                    <button class="button" type="submit">Clear</button>
+                </form>
+            </div>
         </div>
-        <div class="navbar-collapse collapse">
-          <form class="navbar-form navbar-right test">
-                <input type="text" class="placeholders" placeholder="Search…" type="search" data-bind="value: query, valueUpdate: 'keyup'">
-                <button class="button" type="submit">Clear</button>
-            </form>
-        </div>
-      </div>
-</nav>
+    </nav>
 
-<div class="container-fluid">
-      <div class="row row-offcanvas row-offcanvas-left">
-         <div class="col-sm-3 col-md-2 sidebar-offcanvas col-xs-6 col-sm-3" id="sidebar" role="navigation">
-            <div class = "sidebar-nav">
-                <ul class = "list-unstyled" data-bind="foreach: filteredList">
-              <li><a data-bind="attr:{id:name}, text: name, click: $parent.clickListItem"></a></li>
-            </ul>
-        </div>
-        </div><!--/span-->
+    <div class="container-fluid">
+        <div class="row row-offcanvas row-offcanvas-left">
+            <div class="col-md-2 sidebar-offcanvas col-xs-6 col-sm-3" id="sidebar" role="navigation">
+                <div class="sidebar-nav">
+                    <ul data-bind="foreach: filteredList">
+                        <li><a data-bind="attr:{id:name}, text: name, click: $parent.clickListItem"></a></li>
+                    </ul>
+                </div>
+            </div>
             <div id="map"></div>
-      </div>
-</div><!--/.container-->
+        </div>
+    </div>
 
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="js/bootstrap.js"></script>
     <script src="js/knockout-min.js"></script>
-    <script src="js/app.js">
-    </script>
+    <script src="js/app.js"></script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA2hxI29jTOaXwxYHvXrJ3XOrCfNE8CjsQ&callback=initMap"></script>
     <script type="text/javascript">
         $(document).ready(function() {
@@ -62,8 +60,3 @@
 </body>
 
 </html>
-
-
-
-
-
