@@ -158,7 +158,7 @@ var unhighlightLeftNavStyle = function(data) {
     elem.style.backgroundColor = "transparent";
     elem.style.fontWeight = "400";
     elem.style.color = "#337ab7";
-}
+};
 
 //Function to opening the infoWindow,highlight left navigation and changing the color of the marker to green
 var clickActions = function(data) {
