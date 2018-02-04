@@ -39,7 +39,7 @@ var locations = [{
         lat: 37.7762593,
         lng: -122.432758
     }
-]
+];
 
 prevScope = null; //setting up a global state variable for left nav item and marker clicks. Everytime, either one of them is clicked, the current object is stored in this variable to undo the highlight settings
 
@@ -59,7 +59,7 @@ function initMap() {
             lng: -122.436809919
         } //setting the initial center of the map
     });
-    ko.applyBindings(new viewModel);
+    ko.applyBindings(new viewModel());
 }
 
 //Creating a single location object after calling the foursquare api.
@@ -139,9 +139,9 @@ var createLocationObject = function(data) {
         def.resolve(retVal);
     }).fail(function() {
         console.log('Something went wrong with the 4square api');
-    })
+    });
     return def.promise();
-}
+};
 
 
 //Function to update the left navigation styling on click
@@ -150,7 +150,7 @@ var highlightLeftNavStyle = function(data) {
     elem.style.backgroundColor = "#505050";
     elem.style.color = "white";
     elem.style.fontWeight = "700";
-}
+};
 
 //Function to update the left navigation styling on click at another link
 var unhighlightLeftNavStyle = function(data) {
@@ -166,19 +166,19 @@ var clickActions = function(data) {
     data.marker.setIcon('https://goo.gl/iDKehU');
     map.setCenter(new google.maps.LatLng(data.lat, data.lng)); //setting map center as current lat and lng.
     highlightLeftNavStyle(data);
-}
+};
 
 //Function to close infoWindow,un-highlight left navigation and changing the color of the marker back to red
 var undoClickActions = function(data) {
     data.infoWindow.close(); //To close any already open info windows so that there is only one infowindow open at a given time.
     data.marker.setIcon('https://goo.gl/Htiu8j'); //change the icon color to the default one which is red
     unhighlightLeftNavStyle(data.name);
-}
+};
 
 //Function to trigge the sequence of actions once one of list items in the left navigation is clicked
 var leftNavClickActions = function(data) {
     clickActions(data);
-}
+};
 
 var viewModel = function() {
 
@@ -191,7 +191,7 @@ var viewModel = function() {
     locations.forEach(function(locationItem) {
         createLocationObject(locationItem).then(function(data) {
             self.locationList.push(data);
-        })
+        });
     });
 
     this.navclick = ko.observable();
@@ -212,13 +212,13 @@ var viewModel = function() {
     //tracking the click on the listItem and based on that updating the marker and opening the corresponding infoWindow
     this.clickListItem = function(click) {
         self.navclick(click);
-        if ((click != null)) {
+        if ((click !== null)) {
             currScope = self.navclick();
-            if ((prevScope != null)) {
+            if ((prevScope !== null)) {
                 undoClickActions(prevScope);
             }
             leftNavClickActions(currScope);
             prevScope = currScope;
         }
-    }
-}
+    };
+};
