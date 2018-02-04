@@ -11,6 +11,19 @@ The location data is being pulled from the foursquare API and the map is being g
 # Framework Used
 I have used knockout JS framework for this application
 
+# Code
+HTML
+Index.html - This is where all the data-bindings have created
+
+JS
+1) app.js - This is where all the logic is stored
+2) knockout-min.js - Knockout Framework file
+3) bootstrap.js - Bootstrap js file
+
+CSS 
+1) bootstrap.min.css - CSS file for the bootstrap framework
+2) styles.css - Customized styling for the project
+
 # Tools/Skills utilized for this project
 1) Javascript
 2) Jquery
