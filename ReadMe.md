@@ -35,7 +35,7 @@ CSS
 # Live Version of this application is hosted at
 https://mmenghnani.github.io/Neighborhood/
 
-#Steps to run the application
+# Steps to run the application
 1) Open the folder and click on index.html
 2) Click on the hamburger menu on the top left. This will display a list
 3) Enter the 3 starting alphabets of any of the destinations in the searhbox. For example : Gol. This will update the list and the markers in the map to display one. Related to Golden gate.

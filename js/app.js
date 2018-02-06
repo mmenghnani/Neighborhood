@@ -78,30 +78,14 @@ var createLocationObject = function(data) {
         marker: undefined,
         infoWindow: undefined
     };
-    //Creating Map Markers
-    retVal.marker = new google.maps.Marker({
-        map: map,
-        animation: google.maps.Animation.DROP,
-        position: new google.maps.LatLng(data.lat, data.lng),
-        title: self.name
-    });
 
-    //Creating a click event listener on the marker and updating stylees and closing infoWindow for the previously clicked marker.
-    retVal.marker.addListener('click', function() {
-        if (prevScope) {
-            undoClickActions(prevScope);
-        }
-        this.infoWindow.setContent(this.contentString);
-        prevScope = this;
-        clickActions(this);
-    }.bind(retVal));
 
     //Autorization keys for the API
     clientID = "C2BEK4YGZW2O5TGDFVDIE3MFJWH3U1WZ3N2VJJ3BLYM4PIHE";
     clientSecret = "R1WVGB43T21Z1FYTIIY4DH2X5AB3O14TNNKNV5UQVHILUPXJ";
 
     //Creating the API url to make the call
-    var foursquareURL = 'https://api.foursquare.com/v2/' +
+    var foursquareURL = 'https://apia.foursquare.com/v2/' +
         'venues/search?ll=' + data.lat + ',' + data.lng + '&client_id=' + clientID +
         '&client_secret=' + clientSecret + '&v=20180124' + '&query=' + data.name +
         '&intent=match';
@@ -139,7 +123,27 @@ var createLocationObject = function(data) {
     }).fail(function() {
         alert('This app cant be used momentarily as the foursquare API is down. Something went wrong with the 4square api');
     });
+
+     //Creating Map Markers
+    retVal.marker = new google.maps.Marker({
+        map: map,
+        animation: google.maps.Animation.DROP,
+        position: new google.maps.LatLng(data.lat, data.lng),
+        title: self.name
+    });
+
+    //Creating a click event listener on the marker and updating stylees and closing infoWindow for the previously clicked marker.
+    retVal.marker.addListener('click', function() {
+        if (prevScope) {
+            undoClickActions(prevScope);
+        }
+        this.infoWindow.setContent(this.contentString);
+        prevScope = this;
+        clickActions(this);
+    }.bind(retVal));
     return def.promise();
+
+
 
 };
 
