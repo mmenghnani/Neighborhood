@@ -78,7 +78,6 @@ var createLocationObject = function(data) {
         marker: undefined,
         infoWindow: undefined
     };
-
     //Creating Map Markers
     retVal.marker = new google.maps.Marker({
         map: map,
@@ -141,6 +140,7 @@ var createLocationObject = function(data) {
         alert('This app cant be used momentarily as the foursquare API is down. Something went wrong with the 4square api');
     });
     return def.promise();
+
 };
 
 
@@ -155,9 +155,11 @@ var highlightLeftNavStyle = function(data) {
 //Function to update the left navigation styling on click at another link
 var unhighlightLeftNavStyle = function(data) {
     var elem = document.getElementById(data);
-    elem.style.backgroundColor = "transparent";
-    elem.style.fontWeight = "400";
-   elem.style.color = "#337ab7";
+    if(elem){
+        elem.style.backgroundColor = "transparent";
+        elem.style.fontWeight = "400";
+        elem.style.color = "#337ab7";
+    }
 };
 
 //Function to opening the infoWindow,highlight left navigation and changing the color of the marker to green
@@ -170,9 +172,10 @@ var clickActions = function(data) {
 
 //Function to close infoWindow,un-highlight left navigation and changing the color of the marker back to red
 var undoClickActions = function(data) {
-    data.infoWindow.close(); //To close any already open info windows so that there is only one infowindow open at a given time.
-    data.marker.setIcon('https://goo.gl/Htiu8j'); //change the icon color to the default one which is red
-    unhighlightLeftNavStyle(data.name);
+        data.infoWindow.close(); //To close any already open info windows so that there is only one infowindow open at a given time.
+        data.marker.setIcon('https://goo.gl/Htiu8j'); //change the icon color to the default one which is red
+        unhighlightLeftNavStyle(data.name);
+        data.infoWindowIsOpen = false;
 };
 
 //Function to trigge the sequence of actions once one of list items in the left navigation is clicked
@@ -203,6 +206,7 @@ var viewModel = function() {
             if (locationItem.name.toLowerCase().indexOf(self.query().toLowerCase()) >= 0) {
                 locationItem.marker.setMap(map);
             } else {
+                locationItem.infoWindow.close();
                 locationItem.marker.setMap(null);
             }
             return locationItem.name.toLowerCase().indexOf(self.query().toLowerCase()) >= 0;
@@ -221,8 +225,9 @@ var viewModel = function() {
             prevScope = currScope;
         }
     };
+
 };
 
 function GoogleAPIError(){
-    alert("Google Maps API is not responding");
+    alert("Google Maps API is not responding. So, the app is not available. Please standby");
 }
