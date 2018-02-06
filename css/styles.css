@@ -1,7 +1,45 @@
- #map {
-     padding-bottom: 55%;
-     position: relative;
+
+
+.page_title {
+    padding: 15px 5px 10px 5px;
 }
+
+.hr-color{
+    border-top : 1px double;
+    border-top-color: grey;
+}
+
+.list_cell {
+    padding-top: 3px;
+    padding-right: 3px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    background-color: #808080;
+}
+
+
+.search-box {
+    width: 75%;
+    font-size: 1em;
+    text-align: center;
+}
+
+
+ #map {
+     min-height: 850px;
+     position: relative;
+     overflow: hidden;
+}
+
+
+html,body{
+    height: 100%;
+}
+
+.sidebar_width{
+        min-width: 300px;
+}
+
  .button {
      -webkit-transition-duration: 0.5s;
     /* Safari */
@@ -11,30 +49,13 @@
      background-color: #4CAF50;
      color: white;
 }
-/* * Off Canvas * -------------------------------------------------- */
- @media screen and (max-width: 768px) {
-     .row-offcanvas {
-         position: relative;
-         -webkit-transition: all 0.25s ease-out;
-         -moz-transition: all 0.25s ease-out;
-         transition: all 0.25s ease-out;
-         background:#ecf0f1;
-    }
-     .row-offcanvas-left .sidebar-offcanvas {
-         left: -20%;
-    }
-     .row-offcanvas-left.active {
-         left: 20%;
-    }
-     .sidebar-offcanvas {
-         position: absolute;
-         top: 0;
-         width: 20%;
-         margin-left: 12px;
-    }
+
+
+.cell-customization{
+    color: #808080;
+    margin-top: 5px;
 }
 
- #sidebar {
-     padding:15px;
-     margin-top:50px;
+#sidebar{
+    min-height: 850px;
 }

@@ -138,7 +138,7 @@ var createLocationObject = function(data) {
         });
         def.resolve(retVal);
     }).fail(function() {
-        console.log('Something went wrong with the 4square api');
+        alert('This app cant be used momentarily as the foursquare API is down. Something went wrong with the 4square api');
     });
     return def.promise();
 };
@@ -147,7 +147,7 @@ var createLocationObject = function(data) {
 //Function to update the left navigation styling on click
 var highlightLeftNavStyle = function(data) {
     var elem = document.getElementById(data.name);
-    elem.style.backgroundColor = "#505050";
+    elem.style.backgroundColor = "#808080";
     elem.style.color = "white";
     elem.style.fontWeight = "700";
 };
@@ -157,7 +157,7 @@ var unhighlightLeftNavStyle = function(data) {
     var elem = document.getElementById(data);
     elem.style.backgroundColor = "transparent";
     elem.style.fontWeight = "400";
-    elem.style.color = "#337ab7";
+   elem.style.color = "#337ab7";
 };
 
 //Function to opening the infoWindow,highlight left navigation and changing the color of the marker to green
@@ -222,3 +222,7 @@ var viewModel = function() {
         }
     };
 };
+
+function GoogleAPIError(){
+    alert("Google Maps API is not responding");
+}
